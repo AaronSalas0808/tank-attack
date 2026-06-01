@@ -1,0 +1,94 @@
+DIAGRAMA DE CLASES - TANK ATTACK
+
+GameObject
+- id: privado
+- x: privado
+- y: privado
++ get id()
++ get x()
++ get y()
++ setPosition(x, y)
++ toJSON()
+
+Tank extiende GameObject
+- life: privado
+- maxLife: privado
+- direction: privado
+- cooldown: privado
+- maxCooldown: privado
+- damage: privado
+- vision: privado
++ setDirection(direction)
++ tickCooldown()
++ canShoot()
++ resetCooldown()
++ receiveDamage(amount)
++ restore()
++ toJSON()
+
+PlayerTank extiende Tank
++ lives
++ loseLifeAndRespawn(x, y)
+
+EnemyTank extiende Tank
++ type
++ objectiveId
++ color
++ pendingRoute
++ toJSON()
+
+Bullet extiende GameObject
++ direction
++ ownerId
++ damage
++ nextPosition()
+
+Wall extiende GameObject
+
+Objective extiende GameObject
++ type
++ destroyed
++ destroy()
++ toJSON()
+
+GameManager
+- levelIndex: privado
+- player: privado
+- walls: privado
+- objectives: privado
+- enemies: privado
+- bullets: privado
+- running: privado
+- finished: privado
+- score: privado
+- prologOnline: privado
++ start()
++ resetGame()
++ loadLevel(index)
++ movePlayer(direction)
++ playerShoot()
++ update()
++ requestEnemyAI()
++ applyEnemyDecision(enemy, decision)
++ updateBullets()
++ checkLevelStatus()
+
+TankAttackScene extiende Phaser.Scene
++ create()
++ update(time)
++ startGame()
++ resetGame()
++ drawWorld()
++ drawTank()
++ drawWall()
++ drawObjective()
++ drawBullet()
+
+PrologService
++ askEnemyAI(payload)
+
+Relaciones:
+- GameManager administra PlayerTank, EnemyTank, Bullet, Wall y Objective.
+- TankAttackScene usa GameManager para dibujar y actualizar el juego en Phaser.
+- EnemyTank consulta indirectamente a Prolog mediante GameManager y PrologService.
+- server.pl en Prolog decide acciones y rutas de los enemigos.

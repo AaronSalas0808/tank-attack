@@ -3,7 +3,7 @@ import EnemyTank from './classes/EnemyTank.js';
 import Bullet from './classes/Bullet.js';
 import Wall from './classes/Wall.js';
 import Objective from './classes/Objective.js';
-import { BASE_LEVELS, GRID } from './levels/defaultLevels.js';
+import { BASE_LEVELS, GRID, regenerateLevel } from './levels/defaultLevels.js';
 import { askEnemyAI } from './services/PrologService.js';
 
 const DIRECTIONS = {
@@ -63,7 +63,8 @@ export default class GameManager {
   }
 
   loadLevel(index) {
-    const data = BASE_LEVELS[index];
+    // Regenera el nivel aleatoriamente en cada carga
+    const data = regenerateLevel(index);
     this.#levelIndex = index;
     this.#player = new PlayerTank(data.playerStart.x, data.playerStart.y);
     this.#walls = data.walls.map(([x, y], i) => new Wall(`wall-${i}`, x, y));

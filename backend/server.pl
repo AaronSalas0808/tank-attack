@@ -52,7 +52,7 @@ cargar_hechos(Datos) :-
 % ----------------------------
 
 % 1. Si el jugador está cerca, alineado y sin muro en medio, dispara.
-decidir_accion(Enemy, Player, _Objective, disparar, Direccion, [], 'Jugador cerca y con línea de visión. Disparar.') :-
+decidir_accion(Enemy, Player, _Objective, disparar, Direccion, [], 'Jugador cerca y con linea de vision. Disparar.') :-
     cerca(Enemy, Player),
     linea_vision(Enemy, Player, Direccion),
     !.
@@ -66,7 +66,7 @@ decidir_accion(Enemy, _Player, Objective, mover, Direccion, RutaDict, 'Vida baja
     !.
 
 % 3. Si no puede disparar pero el jugador está cerca, busca ruta para emboscar/acercarse.
-decidir_accion(Enemy, Player, _Objective, mover, Direccion, RutaDict, 'Jugador cercano sin línea directa. Buscar ruta de ataque.') :-
+decidir_accion(Enemy, Player, _Objective, mover, Direccion, RutaDict, 'Jugador cercano sin linea directa. Buscar ruta de ataque.') :-
     cerca(Enemy, Player),
     buscar_ruta(Enemy.x, Enemy.y, Player.x, Player.y, Ruta),
     ruta_a_dict(Ruta, RutaDict),

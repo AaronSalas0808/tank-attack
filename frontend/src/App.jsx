@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Phaser from 'phaser';
 import TankAttackScene from './game/scenes/TankAttackScene.js';
 import { GRID } from './game/levels/defaultLevels.js';
+import LevelEditor from './LevelEditor.jsx';
 
 const initialState = {
   level: 1,
@@ -16,8 +17,9 @@ const initialState = {
 
 export default function App() {
   const containerRef = useRef(null);
-  const phaserRef = useRef(null);
-  const [state, setState] = useState(initialState);
+  const phaserRef    = useRef(null);
+  const [state, setState]       = useState(initialState);
+  const [showEditor, setShowEditor] = useState(false);
 
   useEffect(() => {
     const scene = new TankAttackScene({ onStateChange: setState });
@@ -55,11 +57,17 @@ export default function App() {
         <header className="topbar">
           <div>
             <h1>Tank-Attack</h1>
-            <p>React para el panel · Phaser para la interfaz gráfica · SWI-Prolog como cerebro de la IA enemiga</p>
+            <p>React · Phaser · SWI-Prolog</p>
           </div>
           <div className="actions">
             <button onClick={() => getScene()?.startGame()}>Inicio</button>
             <button onClick={() => getScene()?.resetGame()}>Reiniciar</button>
+            <button
+              className="btn-editor"
+              onClick={() => setShowEditor(v => !v)}
+            >
+              {showEditor ? '🎮 Volver al juego' : '🗺 Editor de niveles'}
+            </button>
           </div>
         </header>
 
@@ -73,17 +81,25 @@ export default function App() {
           </article>
         </section>
 
-        <div className="game-frame">
-          <div ref={containerRef} className="game-container" />
+        {/* El contenedor de Phaser SIEMPRE está montado, solo se oculta con CSS */}
+        <div style={{ visibility: showEditor ? "hidden" : "visible", height: showEditor ? 0 : "auto", overflow: showEditor ? "hidden" : "visible" }}>
+          <div className="game-frame">
+            <div ref={containerRef} className="game-container" />
+          </div>
+          <div className="console">
+            <span>Estado:</span> {state.message}
+          </div>
+          <p className="help">
+            <strong>Controles:</strong> flechas o WASD para moverse · espacio para disparar.
+            Los enemigos consultan a Prolog para decidir si se mueven, disparan o defienden.
+          </p>
         </div>
 
-        <div className="console">
-          <span>Estado:</span> {state.message}
-        </div>
+        {/* El editor se monta/desmonta normalmente */}
+        {showEditor && (
+          <LevelEditor onClose={() => setShowEditor(false)} />
+        )}
 
-        <p className="help">
-          <strong>Controles:</strong> flechas o WASD para moverse · espacio para disparar. Los enemigos consultan a Prolog cada cierto tiempo para decidir si se mueven, disparan o defienden el objetivo.
-        </p>
       </section>
     </main>
   );

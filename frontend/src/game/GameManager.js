@@ -49,6 +49,8 @@ export default class GameManager {
   get finished() { return this.#finished; }
 
   start() {
+    // Recarga el nivel actual para que tome cambios del editor
+    this.loadLevel(this.#levelIndex);
     this.#running = true;
     this.#finished = false;
     this.#message = 'Juego iniciado. Prolog decide la IA enemiga.';
